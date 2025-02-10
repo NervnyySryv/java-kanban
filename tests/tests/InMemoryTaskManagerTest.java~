@@ -76,16 +76,4 @@ public class InMemoryTaskManagerTest {
     @Test
     public void testTaskSetters() {
         TaskManager manager = new InMemoryTaskManager();
-        Task task = new Task("Task 1", "Description 1");
-        manager.addTask(task);
-
-        task.setTitle("New Title");
-        task.setDescription("New Description");
-        task.setStatus(Status.IN_PROGRESS);
-
-        Task updatedTask = manager.getTaskById(task.getId());
-        assertEquals("New Title", updatedTask.getTitle());
-        assertEquals("New Description", updatedTask.getDescription());
-        assertEquals(Status.IN_PROGRESS, updatedTask.getStatus());
-    }
-}
+        Task task
