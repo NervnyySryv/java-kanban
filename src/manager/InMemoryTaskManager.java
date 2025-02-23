@@ -92,14 +92,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Epic getEpicById(int id) {
+    public void getEpicById(int id) {
         Epic epic = epics.get(id);
         if (epic == null) {
             System.out.println("Эпик с ID " + id + " не найден.");
         } else {
             historyManager.add(epic);
         }
-        return epic;
     }
 
     @Override
@@ -150,14 +149,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Subtask getSubtaskById(int id) {
+    public void getSubtaskById(int id) {
         Subtask subtask = subtasks.get(id);
         if (subtask == null) {
             System.out.println("Подзадача с ID " + id + " не найдена.");
         } else {
             historyManager.add(subtask);
         }
-        return subtask;
     }
 
     @Override

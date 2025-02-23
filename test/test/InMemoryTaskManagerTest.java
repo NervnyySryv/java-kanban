@@ -1,4 +1,4 @@
-package tests;
+package test;
 
 import entities.Epic;
 import entities.Subtask;
@@ -87,5 +87,36 @@ public class InMemoryTaskManagerTest {
         assertEquals("New Title", updatedTask.getTitle());
         assertEquals("New Description", updatedTask.getDescription());
         assertEquals(Status.IN_PROGRESS, updatedTask.getStatus());
+    }
+
+    @Test
+    public void testUpdateNonExistentTask() {
+        TaskManager manager = new InMemoryTaskManager();
+        Task task = new Task("Task 1", "Description 1");
+        manager.updateTask(task); // Несуществующая задача
+        assertEquals(0, manager.getAllTasks().size(), "Задача не должна быть добавлена");
+    }
+
+    @Test
+    public void testRemoveNonExistentTask() {
+        TaskManager manager = new InMemoryTaskManager();
+        manager.removeTaskById(999); // Несуществующий ID
+        assertEquals(0, manager.getAllTasks().size(), "Список задач должен остаться пустым");
+    }
+
+    @Test
+    public void testAddSubtaskToNonExistentEpic() {
+        TaskManager manager = new InMemoryTaskManager();
+        Subtask subtask = new Subtask("Subtask 1", "Description 1", 999); // Несуществующий ID эпика
+        manager.addSubtask(subtask);
+        assertEquals(0, manager.getAllSubtasks().size(), "Подзадача не должна быть добавлена");
+    }
+
+    @Test
+    public void testUpdateEpicStatusWithoutSubtasks() {
+        TaskManager manager = new InMemoryTaskManager();
+        Epic epic = new Epic("Epic 1", "Description 1");
+        manager.addEpic(epic);
+        assertEquals(Status.NEW, epic.getStatus(), "Статус эпика без подзадач должен быть NEW");
     }
 }

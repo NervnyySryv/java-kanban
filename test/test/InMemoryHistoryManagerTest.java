@@ -1,4 +1,4 @@
-package tests;
+package test;
 
 import entities.Task;
 import manager.InMemoryHistoryManager;
@@ -69,5 +69,30 @@ public class InMemoryHistoryManagerTest {
         assertEquals(2, history.size());
         assertEquals(task1, history.get(0));
         assertEquals(task3, history.get(1));
+    }
+
+    @Test
+    public void testEmptyHistory() {
+        InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
+        List<Task> history = historyManager.getHistory();
+        assertEquals(0, history.size(), "История должна быть пустой");
+    }
+
+    @Test
+    public void testRemoveNonExistentTask() {
+        InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
+        Task task = new Task("Task 1", "Description 1");
+        historyManager.add(task);
+        historyManager.remove(999); // Несуществующий ID
+        List<Task> history = historyManager.getHistory();
+        assertEquals(1, history.size(), "История не должна измениться");
+    }
+
+    @Test
+    public void testAddNullTask() {
+        InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
+        historyManager.add(null);
+        List<Task> history = historyManager.getHistory();
+        assertEquals(0, history.size(), "История должна остаться пустой");
     }
 }
