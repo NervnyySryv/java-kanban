@@ -26,7 +26,7 @@ public interface TaskManager {
 
     void clearAllEpics();
 
-    void getEpicById(int id);
+    Epic getEpicById(int id);
 
     void addEpic(Epic epic);
 
@@ -39,7 +39,7 @@ public interface TaskManager {
 
     void clearAllSubtasks();
 
-    void getSubtaskById(int id);
+    Subtask getSubtaskById(int id);
 
     void addSubtask(Subtask subtask);
 

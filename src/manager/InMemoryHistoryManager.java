@@ -9,41 +9,45 @@ import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
     private final Map<Integer, Node> historyMap; // Хранит ID задачи и соответствующий узел
-    private Node head; // Начало списка
-    private Node tail; // Конец списка
+    private Node head; // Начало двусвязного списка
+    private Node tail; // Конец двусвязного списка
+
+    // Вложенный private static класс Node для реализации двусвязного списка
+    private static class Node {
+        Task task; // Задача, связанная с этим узлом
+        Node prev; // Ссылка на предыдущий узел
+        Node next; // Ссылка на следующий узел
+
+        Node(Task task, Node prev, Node next) {
+            this.task = task;
+            this.prev = prev;
+            this.next = next;
+        }
+    }
 
     public InMemoryHistoryManager() {
         this.historyMap = new HashMap<>();
-        this.head = null;
-        this.tail = null;
     }
 
     @Override
     public void add(Task task) {
         if (task == null) {
-            return;
+            return; // Игнорируем null задачи
         }
 
         int id = task.getId();
-        if (historyMap.containsKey(id)) {
-            removeNode(historyMap.get(id)); // Удаляем задачу, если она уже есть в истории
-        }
-
+        removeNode(id); // Удаляем задачу, если она уже есть в истории
         linkLast(task); // Добавляем задачу в конец списка
-        historyMap.put(id, tail); // Обновляем HashMap
     }
 
     @Override
     public void remove(int id) {
-        if (historyMap.containsKey(id)) {
-            removeNode(historyMap.get(id)); // Удаляем узел из списка
-            historyMap.remove(id); // Удаляем задачу из HashMap
-        }
+        removeNode(id); // Удаляем задачу из истории
     }
 
     @Override
     public List<Task> getHistory() {
-        return getTasks();
+        return getTasks(); // Возвращаем список задач из истории
     }
 
     // Добавляет задачу в конец двусвязного списка
@@ -55,14 +59,17 @@ public class InMemoryHistoryManager implements HistoryManager {
             tail.next = newNode; // Иначе добавляем новый узел в конец
         }
         tail = newNode; // Новый узел становится хвостом
+        historyMap.put(task.getId(), newNode); // Добавляем задачу в HashMap
     }
 
-    // Удаляет узел из двусвязного списка
-    private void removeNode(Node node) {
+    // Удаляет задачу из двусвязного списка и из HashMap
+    private void removeNode(int id) {
+        Node node = historyMap.get(id);
         if (node == null) {
-            return;
+            return; // Если задача не найдена, ничего не делаем
         }
 
+        // Удаляем узел из списка
         if (node.prev != null) {
             node.prev.next = node.next; // Обновляем ссылку предыдущего узла
         } else {
@@ -74,9 +81,11 @@ public class InMemoryHistoryManager implements HistoryManager {
         } else {
             tail = node.prev; // Если удаляем хвост, обновляем хвост
         }
+
+        historyMap.remove(id); // Удаляем задачу из HashMap
     }
 
-    // Возвращает все задачи из двусвязного списка в виде ArrayList
+    // Возвращает все задачи из двусвязного списка в виде списка
     private List<Task> getTasks() {
         List<Task> tasks = new ArrayList<>();
         Node current = head;
@@ -86,4 +95,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
         return tasks;
     }
+
+
 }

@@ -27,3 +27,7 @@ hs_err_pid*
 
 #Игнорировать все файлы с расширением .iml
 *.iml
+*~.DS_Store
+src/.DS_Store
+test/.DS_Store
+.DS_Store
